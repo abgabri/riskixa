@@ -1122,6 +1122,8 @@ function Assessment({
 
 const WEIGHTS: Record<Answer, number> = { yes: 1, partial: 0.5, no: 0 };
 
+type GapFilter = "all" | "no" | "partial";
+
 function Results({
   framework,
   answers,
@@ -1131,36 +1133,58 @@ function Results({
   answers: Record<string, Answer>;
   onRestart: () => void;
 }) {
-  const { score, domainScores, gaps, topGap } = useMemo(() => {
-    const allQs = framework.domains.flatMap((d) => d.questions);
-    const total = allQs.reduce(
-      (s, q) => s + WEIGHTS[answers[q.id] ?? "no"],
-      0,
-    );
-    const score = Math.round((total / allQs.length) * 100);
-
-    const domainScores = framework.domains.map((d) => {
-      const sum = d.questions.reduce(
+  const { score, domainScores, gaps, topGap, missingCount, partialCount, totalQuestions } =
+    useMemo(() => {
+      const allQs = framework.domains.flatMap((d) => d.questions);
+      const total = allQs.reduce(
         (s, q) => s + WEIGHTS[answers[q.id] ?? "no"],
         0,
       );
-      return {
-        domain: d,
-        score: Math.round((sum / d.questions.length) * 100),
-      };
-    });
+      const score = Math.round((total / allQs.length) * 100);
 
-    const gaps = allQs
-      .filter((q) => answers[q.id] !== "yes")
-      .sort((a, b) => {
-        const order: Record<Answer, number> = { no: 0, partial: 1, yes: 2 };
-        return (
-          order[answers[a.id] ?? "no"] - order[answers[b.id] ?? "no"]
+      const domainScores = framework.domains.map((d) => {
+        const sum = d.questions.reduce(
+          (s, q) => s + WEIGHTS[answers[q.id] ?? "no"],
+          0,
         );
+        return {
+          domain: d,
+          score: Math.round((sum / d.questions.length) * 100),
+        };
       });
 
-    return { score, domainScores, gaps, topGap: gaps[0] };
-  }, [framework, answers]);
+      const gaps = allQs
+        .filter((q) => answers[q.id] !== "yes")
+        .sort((a, b) => {
+          const order: Record<Answer, number> = { no: 0, partial: 1, yes: 2 };
+          return (
+            order[answers[a.id] ?? "no"] - order[answers[b.id] ?? "no"]
+          );
+        });
+
+      const missingCount = allQs.filter((q) => (answers[q.id] ?? "no") === "no").length;
+      const partialCount = allQs.filter((q) => answers[q.id] === "partial").length;
+
+      return {
+        score,
+        domainScores,
+        gaps,
+        topGap: gaps[0],
+        missingCount,
+        partialCount,
+        totalQuestions: allQs.length,
+      };
+    }, [framework, answers]);
+
+  const [gapFilter, setGapFilter] = useState<GapFilter>("all");
+  const [showAllGaps, setShowAllGaps] = useState(false);
+
+  const filteredGaps = useMemo(() => {
+    if (gapFilter === "all") return gaps;
+    return gaps.filter((g) => (answers[g.id] ?? "no") === gapFilter);
+  }, [gaps, gapFilter, answers]);
+
+  const visibleGaps = showAllGaps ? filteredGaps : filteredGaps.slice(0, 5);
 
   const tone =
     score >= 80
@@ -1185,8 +1209,61 @@ function Results({
     if (typeof window !== "undefined") window.print();
   };
 
+  const renderGapCard = (g: Question) => {
+    const a = answers[g.id] ?? "no";
+    const isNo = a === "no";
+    return (
+      <li
+        key={g.id}
+        className="rounded-xl border border-border bg-card p-5 shadow-sm print:shadow-none print:break-inside-avoid"
+      >
+        <div className="flex items-start gap-4">
+          <div
+            className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
+              isNo
+                ? "bg-[color:var(--destructive)]/10 text-[color:var(--destructive)]"
+                : "bg-[color:var(--warning)]/15 text-[color:var(--warning)]"
+            }`}
+          >
+            {isNo ? <XCircle className="h-4 w-4" /> : <AlertTriangle className="h-4 w-4" />}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-sm font-semibold text-foreground">
+                {g.ref} — {g.area}
+              </h3>
+              <span
+                className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                  isNo
+                    ? "bg-[color:var(--destructive)]/10 text-[color:var(--destructive)]"
+                    : "bg-[color:var(--warning)]/15 text-[color:var(--warning)]"
+                }`}
+              >
+                {isNo ? "Missing" : "Partial"}
+              </span>
+            </div>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              <span className="font-medium text-foreground">Risk: </span>
+              {g.risk}
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+              <span className="font-medium text-foreground">Remediation: </span>
+              {g.remediation}
+            </p>
+          </div>
+        </div>
+      </li>
+    );
+  };
+
+  const filterTabs: { id: GapFilter; label: string; count: number }[] = [
+    { id: "all", label: "All", count: gaps.length },
+    { id: "no", label: "Missing", count: missingCount },
+    { id: "partial", label: "Partial", count: partialCount },
+  ];
+
   return (
-    <section className="space-y-8 print:space-y-6">
+    <section className="space-y-6 print:space-y-6">
       <div className="hidden print:block">
         <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           AuditBridge Report
@@ -1196,48 +1273,61 @@ function Results({
         </h1>
       </div>
 
-      <div className="rounded-2xl border border-border bg-card p-8 shadow-sm print:shadow-none">
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              {framework.name} Readiness Score
+      {/* Top row: score + stat cards */}
+      <div className="grid gap-4 lg:grid-cols-4">
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm print:shadow-none lg:col-span-2 lg:row-span-1">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                {framework.name} Readiness Score
+              </div>
+              <div className="mt-2 flex items-baseline gap-3">
+                <span className="font-display text-6xl text-foreground">{score}%</span>
+                <span className={`text-sm font-semibold ${tone.text}`}>{tone.label}</span>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {totalQuestions} controls · {framework.domains.length} domains
+              </p>
             </div>
-            <div className="mt-2 flex items-baseline gap-3">
-              <span className="font-display text-6xl text-foreground">{score}%</span>
-              <span className={`text-sm font-semibold ${tone.text}`}>
-                {tone.label}
-              </span>
-            </div>
-            <p className="mt-3 max-w-md text-sm text-muted-foreground">
-              Based on {framework.domains.reduce((s, d) => s + d.questions.length, 0)}{" "}
-              control questions across {framework.domains.length} domains.
-            </p>
+            <button
+              onClick={handleDownload}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground transition hover:bg-[var(--primary-hover)] print:hidden"
+            >
+              <Download className="h-3.5 w-3.5" />
+              Download
+            </button>
           </div>
-          <button
-            onClick={handleDownload}
-            className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-[var(--primary-hover)] print:hidden"
-          >
-            <Download className="h-4 w-4" />
-            Download Report
-          </button>
+          <div className="mt-5 h-2.5 w-full overflow-hidden rounded-full bg-secondary">
+            <div
+              className="h-full rounded-full transition-all duration-700 ease-out"
+              style={{ width: `${score}%`, backgroundColor: tone.color }}
+            />
+          </div>
         </div>
-        <div className="mt-6 h-3 w-full overflow-hidden rounded-full bg-secondary">
-          <div
-            className="h-full rounded-full transition-all duration-700 ease-out"
-            style={{ width: `${score}%`, backgroundColor: tone.color }}
-          />
-        </div>
+
+        <StatCard
+          label="Missing Controls"
+          value={missingCount}
+          accent="var(--color-destructive)"
+          icon={<XCircle className="h-4 w-4" />}
+        />
+        <StatCard
+          label="Partial Controls"
+          value={partialCount}
+          accent="var(--color-warning)"
+          icon={<AlertTriangle className="h-4 w-4" />}
+        />
       </div>
 
-      <div>
-        <h2 className="font-display text-3xl text-foreground">
-          Domain breakdown
-        </h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Per-domain readiness across the {framework.shortName} control set.
-        </p>
-
-        <ul className="mt-6 grid gap-3 md:grid-cols-2">
+      {/* Domain grid */}
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-sm print:shadow-none print:break-inside-avoid">
+        <div className="flex items-baseline justify-between gap-4">
+          <h2 className="font-display text-2xl text-foreground">Domain breakdown</h2>
+          <span className="text-xs text-muted-foreground">
+            {framework.domains.length} domains assessed
+          </span>
+        </div>
+        <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {domainScores.map(({ domain, score: ds }) => {
             const dtone =
               ds >= 80
@@ -1248,19 +1338,19 @@ function Results({
             return (
               <li
                 key={domain.id}
-                className="rounded-xl border border-border bg-card p-4 shadow-sm print:shadow-none"
+                className="rounded-xl border border-border bg-surface p-4 print:break-inside-avoid"
               >
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <div className="truncate text-sm font-semibold text-foreground">
                       {domain.name}
                     </div>
-                    <div className="text-xs text-muted-foreground">
-                      {ds}% ready · {domain.questions.length} questions
+                    <div className="mt-0.5 text-[11px] text-muted-foreground">
+                      {domain.questions.length} controls
                     </div>
                   </div>
                   <div
-                    className="text-lg font-semibold tabular-nums"
+                    className="text-base font-semibold tabular-nums"
                     style={{ color: dtone }}
                   >
                     {ds}%
@@ -1278,93 +1368,94 @@ function Results({
         </ul>
       </div>
 
-      <div>
-        <h2 className="font-display text-3xl text-foreground">Prioritized gaps</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Sorted across all domains by severity. Address missing controls first,
-          then strengthen partial ones.
-        </p>
+      {/* Prioritized gaps with tabs */}
+      <div className="rounded-2xl border border-border bg-card p-6 shadow-sm print:shadow-none">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="font-display text-2xl text-foreground">Prioritized gaps</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Address missing controls first, then strengthen partial ones.
+            </p>
+          </div>
+          <div className="inline-flex rounded-lg border border-border bg-surface p-1 print:hidden">
+            {filterTabs.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => {
+                  setGapFilter(t.id);
+                  setShowAllGaps(false);
+                }}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium transition ${
+                  gapFilter === t.id
+                    ? "bg-card text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {t.label}
+                <span className="ml-1.5 text-[10px] tabular-nums opacity-70">
+                  {t.count}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
 
         {gaps.length === 0 ? (
-          <div className="mt-6 rounded-xl border border-border bg-card p-8 text-center">
+          <div className="mt-5 rounded-xl border border-border bg-surface p-8 text-center">
             <Check className="mx-auto h-8 w-8 text-[color:var(--success)]" />
-            <div className="mt-3 font-semibold text-foreground">
-              No gaps identified
-            </div>
+            <div className="mt-3 font-semibold text-foreground">No gaps identified</div>
             <p className="mt-1 text-sm text-muted-foreground">
-              You're in strong shape across the {framework.shortName} controls
-              covered here.
+              You're in strong shape across the {framework.shortName} controls covered here.
             </p>
           </div>
         ) : (
-          <ul className="mt-6 space-y-3">
-            {gaps.map((g) => {
-              const a = answers[g.id] ?? "no";
-              const isNo = a === "no";
-              return (
-                <li
-                  key={g.id}
-                  className="rounded-xl border border-border bg-card p-5 shadow-sm print:shadow-none"
-                >
-                  <div className="flex items-start gap-4">
-                    <div
-                      className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
-                        isNo
-                          ? "bg-[color:var(--destructive)]/10 text-[color:var(--destructive)]"
-                          : "bg-[color:var(--warning)]/15 text-[color:var(--warning)]"
-                      }`}
-                    >
-                      {isNo ? (
-                        <XCircle className="h-4 w-4" />
-                      ) : (
-                        <AlertTriangle className="h-4 w-4" />
-                      )}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-sm font-semibold text-foreground">
-                          {g.ref} — {g.area}
-                        </h3>
-                        <span
-                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                            isNo
-                              ? "bg-[color:var(--destructive)]/10 text-[color:var(--destructive)]"
-                              : "bg-[color:var(--warning)]/15 text-[color:var(--warning)]"
-                          }`}
-                        >
-                          {isNo ? "Missing" : "Partial"}
-                        </span>
-                      </div>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                        <span className="font-medium text-foreground">Risk: </span>
-                        {g.risk}
-                      </p>
-                      <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                        <span className="font-medium text-foreground">
-                          Remediation:{" "}
-                        </span>
-                        {g.remediation}
-                      </p>
-                    </div>
-                  </div>
+          <>
+            {/* On-screen filtered + paginated list */}
+            <ul className="mt-5 space-y-3 print:hidden">
+              {visibleGaps.length === 0 ? (
+                <li className="rounded-xl border border-dashed border-border bg-surface p-6 text-center text-sm text-muted-foreground">
+                  No gaps in this category.
                 </li>
-              );
-            })}
-          </ul>
+              ) : (
+                visibleGaps.map(renderGapCard)
+              )}
+            </ul>
+
+            {filteredGaps.length > 5 && (
+              <div className="mt-4 flex justify-center print:hidden">
+                <button
+                  onClick={() => setShowAllGaps((v) => !v)}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:text-foreground"
+                >
+                  {showAllGaps
+                    ? "Show top 5"
+                    : `Show all ${filteredGaps.length} gaps`}
+                </button>
+              </div>
+            )}
+
+            {/* Print-only: all gaps */}
+            <ul className="mt-5 hidden space-y-3 print:block">
+              {gaps.map(renderGapCard)}
+            </ul>
+          </>
         )}
       </div>
 
+      {/* Policy excerpt — visually distinct */}
       {topGap && (
-        <div>
-          <h2 className="font-display text-3xl text-foreground">
-            Sample policy excerpt
-          </h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Generated for your highest-priority gap. Customize and adopt as a
-            starting draft.
+        <div className="rounded-2xl border border-border bg-surface p-6 shadow-sm print:shadow-none print:break-inside-avoid">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-primary" />
+            <h2 className="font-display text-2xl text-foreground">
+              Sample policy excerpt
+            </h2>
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Bonus output — generated draft for your highest-priority gap.
           </p>
 
-          <article className="mt-6 overflow-hidden rounded-xl border border-border bg-card shadow-sm print:shadow-none">
+          <article className="mt-5 overflow-hidden rounded-xl border border-border bg-card shadow-sm print:shadow-none">
             <div className="flex items-center justify-between border-b border-border bg-surface px-6 py-3">
               <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
                 <FileText className="h-4 w-4" />
@@ -1393,7 +1484,7 @@ function Results({
         </div>
       )}
 
-      <div className="flex justify-center pt-4 print:hidden">
+      <div className="flex justify-center pt-2 print:hidden">
         <button
           onClick={onRestart}
           className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-muted-foreground transition hover:text-foreground"
@@ -1403,5 +1494,36 @@ function Results({
         </button>
       </div>
     </section>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  accent,
+  icon,
+}: {
+  label: string;
+  value: number;
+  accent: string;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm print:shadow-none">
+      <div className="flex items-center justify-between">
+        <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+          {label}
+        </div>
+        <div
+          className="flex h-7 w-7 items-center justify-center rounded-lg"
+          style={{ backgroundColor: `color-mix(in oklab, ${accent} 12%, transparent)`, color: accent }}
+        >
+          {icon}
+        </div>
+      </div>
+      <div className="mt-3 font-display text-4xl text-foreground" style={{ color: accent }}>
+        {value}
+      </div>
+    </div>
   );
 }
