@@ -112,3 +112,10 @@
     letter-spacing: -0.02em;
   }
 }
+
+@media print {
+  @page { margin: 18mm; }
+  body { background: white !important; }
+  .print\:hidden { display: none !important; }
+}
+
