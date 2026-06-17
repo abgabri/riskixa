@@ -1149,7 +1149,7 @@ function FrameworkSelect({ onPick }: { onPick: (f: Framework) => void }) {
     <section className="text-center">
       <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
         <Sparkles className="h-3.5 w-3.5 text-primary" />
-        Built for pre-audit teams
+        Built for pre-audit teams · Powered by Riskixa
       </div>
       <h1 className="mt-6 font-display text-5xl leading-[1.05] text-foreground md:text-6xl">
         Riskixa — Compliance<br />Readiness in Minutes
@@ -1499,7 +1499,7 @@ function Results({
     <section className="space-y-6 print:space-y-6">
       <div className="hidden print:block">
         <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Riskixa Report
+          Riskixa — Compliance Readiness Report
         </div>
         <h1 className="mt-1 font-display text-3xl text-foreground">
           {framework.headerLabel}
