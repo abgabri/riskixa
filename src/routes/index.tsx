@@ -1090,7 +1090,7 @@ function AuditBridge() {
             <div>
               <div className="text-sm font-semibold text-foreground">AuditBridge</div>
               <div className="text-xs text-muted-foreground">
-                {framework ? framework.headerLabel : "Multi-framework readiness"}
+                {framework ? framework.headerLabel : "Multi-framework readiness · 4 frameworks"}
               </div>
             </div>
           </button>
