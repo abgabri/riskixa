@@ -1160,7 +1160,7 @@ function FrameworkSelect({ onPick }: { onPick: (f: Framework) => void }) {
         breakdown, and a prioritized remediation plan.
       </p>
 
-      <div className="mt-10 grid gap-4 text-left md:grid-cols-3">
+      <div className="mt-10 grid gap-4 text-left sm:grid-cols-2 lg:grid-cols-2">
         {FRAMEWORKS.map((f) => (
           <button
             key={f.id}
