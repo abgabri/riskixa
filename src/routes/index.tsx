@@ -20,13 +20,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Assess SOC 2, ISO/IEC 27001:2022, or HIPAA Security Rule readiness in minutes. Get a scored gap analysis, domain breakdown, and prioritized remediation plan.",
+          "Assess SOC 2, ISO/IEC 27001:2022, HIPAA Security Rule, or Cloud Security (AWS) readiness in minutes. Get a scored gap analysis, domain breakdown, and prioritized remediation plan.",
       },
       { property: "og:title", content: "AuditBridge — Compliance Readiness in Minutes" },
       {
         property: "og:description",
         content:
-          "Multi-framework readiness assessment: SOC 2, ISO/IEC 27001:2022, and HIPAA. Scored gap analysis and prioritized remediation.",
+          "Multi-framework readiness assessment: SOC 2, ISO/IEC 27001:2022, HIPAA, and Cloud Security (AWS). Scored gap analysis and prioritized remediation.",
       },
     ],
   }),
@@ -53,7 +53,7 @@ interface Domain {
 }
 
 interface Framework {
-  id: "soc2" | "iso27001" | "hipaa";
+  id: "soc2" | "iso27001" | "hipaa" | "aws";
   name: string;
   shortName: string;
   headerLabel: string;
@@ -827,7 +827,240 @@ const HIPAA: Framework = {
   ],
 };
 
-const FRAMEWORKS: Framework[] = [SOC2, ISO, HIPAA];
+/* ---------------- Cloud Security (AWS) ---------------- */
+const AWS: Framework = {
+  id: "aws",
+  name: "Cloud Security (AWS)",
+  shortName: "AWS",
+  headerLabel: "Cloud Security Readiness Assessment (AWS)",
+  description:
+    "AWS Shared Responsibility Model & CIS AWS Foundations Benchmark — 6 domains · 22 questions",
+  citationLabel: (q) => `CIS AWS ${q.ref} — ${q.area}`,
+  domains: [
+    {
+      id: "iam",
+      name: "Identity & Access Management (IAM)",
+      questions: [
+        {
+          id: "aws-iam-1", ref: "1.14", area: "MFA for IAM Users",
+          question: "Is MFA enforced for the root account and all IAM users?",
+          context: "CIS AWS 1.5 / 1.14 — MFA on root and console-password users.",
+          risk: "Single-factor IAM access is the leading initial-access vector for cloud breaches.",
+          remediation: "Enforce MFA via IAM policy condition and enable hardware MFA on root.",
+          policy: "Multi-factor authentication is required for the AWS root account and every IAM user with a console password, enforced via an IAM policy condition that denies non-MFA API calls.",
+        },
+        {
+          id: "aws-iam-2", ref: "1.16", area: "Least Privilege IAM Policies",
+          question: "Do IAM policies follow the least-privilege principle with no overly permissive policies?",
+          context: "CIS AWS 1.16 — no IAM policies allowing full \"*:*\" administrative privileges.",
+          risk: "Wildcard policies enable lateral movement and full-account takeover from a single compromised principal.",
+          remediation: "Replace \"*:*\" allow statements with action- and resource-scoped policies; use IAM Access Analyzer.",
+          policy: "IAM policies grant only the actions and resources required for a documented job function; \"*:*\" administrative grants are prohibited outside of break-glass roles that require MFA and trigger an alert.",
+        },
+        {
+          id: "aws-iam-3", ref: "1.4", area: "Root Access Keys Disabled",
+          question: "Is the root account access key disabled and unused?",
+          context: "CIS AWS 1.4 — no root user access key should exist.",
+          risk: "Root access keys cannot be scoped and bypass every guardrail if leaked.",
+          remediation: "Delete any existing root access keys; rely on the root password + hardware MFA only.",
+          policy: "Programmatic access keys for the AWS root account are prohibited; any existing root access keys are deleted and account activity is alerted on root API usage.",
+        },
+        {
+          id: "aws-iam-4", ref: "1.18", area: "IAM Roles for Services",
+          question: "Are IAM roles used instead of long-term access keys for services and applications?",
+          context: "CIS AWS 1.18 — use instance roles / IRSA / service roles instead of static keys.",
+          risk: "Long-lived access keys in code or EC2 instances are routinely leaked via repos and logs.",
+          remediation: "Migrate workloads to IAM roles (EC2 instance profiles, IRSA, Lambda execution roles).",
+          policy: "AWS workloads obtain temporary credentials via IAM roles (instance profiles, IRSA, or service-linked roles); long-term IAM user access keys for application workloads are prohibited.",
+        },
+      ],
+    },
+    {
+      id: "logging",
+      name: "Logging & Monitoring",
+      questions: [
+        {
+          id: "aws-log-1", ref: "3.1", area: "CloudTrail All Regions",
+          question: "Is AWS CloudTrail enabled and logging in all regions?",
+          context: "CIS AWS 3.1 — multi-region CloudTrail with management events.",
+          risk: "Without multi-region CloudTrail, attacker activity in unused regions goes unrecorded.",
+          remediation: "Enable a multi-region organization trail with log file validation to a dedicated logging account.",
+          policy: "A multi-region AWS CloudTrail captures all management events and writes to an immutable S3 bucket in a dedicated logging account with log-file integrity validation enabled.",
+        },
+        {
+          id: "aws-log-2", ref: "4.x", area: "CloudWatch Security Alarms",
+          question: "Are CloudWatch alerts configured for critical security events (e.g., root login, policy changes)?",
+          context: "CIS AWS 4.1–4.15 — metric filters and alarms for sensitive API activity.",
+          risk: "Sensitive events such as root login or IAM policy changes pass silently without alerting.",
+          remediation: "Deploy the CIS metric-filter set with SNS notification to the security team.",
+          policy: "CloudWatch metric filters and alarms notify the security team in real time for root account use, IAM policy changes, CloudTrail configuration changes, console sign-in failures, and disabling of CMKs.",
+        },
+        {
+          id: "aws-log-3", ref: "3.5", area: "AWS Config Enabled",
+          question: "Is AWS Config enabled to track and record resource configuration changes?",
+          context: "CIS AWS 3.5 — AWS Config recording all resources in all regions.",
+          risk: "Without Config history, drift and unauthorized changes cannot be reconstructed during investigations.",
+          remediation: "Enable AWS Config in all regions recording all supported resource types.",
+          policy: "AWS Config is enabled in every region and records all supported resource types; configuration history is centralized in the logging account with conformance packs aligned to CIS controls.",
+        },
+        {
+          id: "aws-log-4", ref: "3.9", area: "VPC Flow Logs",
+          question: "Are VPC Flow Logs enabled for network traffic monitoring?",
+          context: "CIS AWS 3.9 — VPC flow logging for all VPCs.",
+          risk: "Without flow logs, lateral movement and data exfiltration over the network are not detectable.",
+          remediation: "Enable VPC Flow Logs (ALL traffic) for every VPC to centralized storage.",
+          policy: "VPC Flow Logs capturing ACCEPT and REJECT traffic are enabled on every VPC and delivered to a centralized log store with 12-month retention.",
+        },
+      ],
+    },
+    {
+      id: "data",
+      name: "Data Protection",
+      questions: [
+        {
+          id: "aws-data-1", ref: "2.1.5", area: "S3 Block Public Access",
+          question: "Are all S3 buckets blocked from public access at the account level?",
+          context: "CIS AWS 2.1.5 — S3 Block Public Access enabled at account and bucket level.",
+          risk: "Public S3 buckets are one of the most common sources of cloud data exposure.",
+          remediation: "Enable account-level S3 Block Public Access and remediate any bucket-level overrides.",
+          policy: "S3 Block Public Access is enabled at the AWS account level and on every bucket; any exception requires documented data-owner approval and is monitored by AWS Config.",
+        },
+        {
+          id: "aws-data-2", ref: "2.2.1", area: "Encryption at Rest (KMS)",
+          question: "Is data encrypted at rest using AWS KMS or equivalent?",
+          context: "CIS AWS 2.2.1 / 2.1.1 — encryption at rest for EBS, RDS, S3 via KMS.",
+          risk: "Unencrypted volumes and buckets expose data on snapshot sharing, disposal, or backup leaks.",
+          remediation: "Enable default encryption with customer-managed KMS keys for EBS, RDS, and S3.",
+          policy: "All persistent data stores — including S3, EBS, RDS, and snapshots — are encrypted at rest using AWS KMS customer-managed keys with key rotation enabled.",
+        },
+        {
+          id: "aws-data-3", ref: "tls", area: "Encryption in Transit (TLS 1.2+)",
+          question: "Is data encrypted in transit using TLS 1.2 or higher across all endpoints?",
+          context: "AWS Shared Responsibility — customer is responsible for in-transit encryption configuration.",
+          risk: "Plaintext or legacy-TLS endpoints expose data to interception and downgrade attacks.",
+          remediation: "Enforce TLS 1.2+ on ALBs/CloudFront via security policies and disable legacy ciphers.",
+          policy: "All public and internal endpoints terminate TLS 1.2 or higher using AWS-recommended security policies; legacy protocols (SSLv3, TLS 1.0/1.1) are disabled and HSTS is enforced on public sites.",
+        },
+        {
+          id: "aws-data-4", ref: "sm", area: "Secrets Manager",
+          question: "Are secrets and credentials managed via AWS Secrets Manager with no hardcoded credentials in code?",
+          context: "AWS Well-Architected Security Pillar — secrets management.",
+          risk: "Hardcoded credentials in source control are routinely scraped and abused within minutes of exposure.",
+          remediation: "Migrate secrets to AWS Secrets Manager with rotation; add pre-commit secret scanning.",
+          policy: "Application secrets and database credentials are stored in AWS Secrets Manager with automatic rotation; hardcoded credentials in source control are prohibited and enforced by automated secret scanning.",
+        },
+      ],
+    },
+    {
+      id: "network",
+      name: "Network Security",
+      questions: [
+        {
+          id: "aws-net-1", ref: "5.2", area: "Security Group Ingress",
+          question: "Do Security Groups follow least-privilege with no unrestricted inbound access (0.0.0.0/0) on sensitive ports?",
+          context: "CIS AWS 5.2 / 5.3 — no SG allowing 0.0.0.0/0 to admin ports (22, 3389).",
+          risk: "Open admin ports are scanned and exploited continuously across the public internet.",
+          remediation: "Restrict SG ingress to specific CIDRs or use SSM Session Manager / bastion instead.",
+          policy: "Security Groups deny 0.0.0.0/0 ingress to administrative ports (22, 3389) and database ports; administrative access uses AWS Systems Manager Session Manager or a hardened bastion.",
+        },
+        {
+          id: "aws-net-2", ref: "vpc", area: "VPC Subnet Segmentation",
+          question: "Does the VPC architecture properly separate public and private subnets?",
+          context: "AWS Well-Architected — segmented subnet design with NAT for egress.",
+          risk: "Flat networks let a single compromised resource reach databases and internal services unchecked.",
+          remediation: "Place workloads in private subnets behind NAT gateways; reserve public subnets for load balancers only.",
+          policy: "VPC architecture separates public subnets (load balancers, NAT) from private subnets (application and data tiers); database tiers reside in isolated subnets with no route to the internet gateway.",
+        },
+        {
+          id: "aws-net-3", ref: "waf", area: "AWS WAF",
+          question: "Is AWS WAF configured for all public-facing applications?",
+          context: "AWS Shared Responsibility — application-layer protection is a customer responsibility.",
+          risk: "Public web apps without WAF are exposed to OWASP Top 10 attacks at the edge.",
+          remediation: "Attach AWS WAF with managed rule groups (Core, KnownBadInputs) to all public ALBs/CloudFront.",
+          policy: "AWS WAF is attached to every public-facing CloudFront distribution and Application Load Balancer with AWS managed rule groups for the OWASP Top 10 and rate-based rules for abuse protection.",
+        },
+        {
+          id: "aws-net-4", ref: "5.6", area: "SG Port Review",
+          question: "Are unused or open ports regularly reviewed and removed from security group rules?",
+          context: "AWS Well-Architected — periodic review of network exposure.",
+          risk: "Forgotten open ports accumulate over time and become attack surface.",
+          remediation: "Run quarterly SG reviews using AWS Config or third-party tooling; remove stale rules.",
+          policy: "Security Group rules are reviewed at least quarterly using AWS Config conformance packs; unused or unjustified ingress rules are removed and the review is documented.",
+        },
+      ],
+    },
+    {
+      id: "ir",
+      name: "Incident Response & Recovery",
+      questions: [
+        {
+          id: "aws-ir-1", ref: "gd", area: "GuardDuty Enabled",
+          question: "Is AWS GuardDuty enabled for continuous threat detection?",
+          context: "CIS AWS 4.16 — GuardDuty enabled in all regions.",
+          risk: "Without GuardDuty, known IoCs (crypto-mining, credential exfiltration) go undetected.",
+          remediation: "Enable GuardDuty organization-wide in every region with findings centralized.",
+          policy: "AWS GuardDuty is enabled in every region across the organization; findings are centralized in the security account and reviewed by the security team within one business day.",
+        },
+        {
+          id: "aws-ir-2", ref: "ir", area: "Cloud Incident Runbook",
+          question: "Is a documented incident response runbook in place for cloud-specific scenarios?",
+          context: "AWS Well-Architected Security Pillar — incident response playbooks.",
+          risk: "Ad-hoc response during a cloud incident loses critical time and forensic evidence.",
+          remediation: "Author runbooks for credential exposure, public bucket, ransomware, and account compromise.",
+          policy: "Documented incident response runbooks cover cloud-specific scenarios including IAM credential exposure, public S3 bucket exposure, and AWS account compromise; runbooks are tested at least annually.",
+        },
+        {
+          id: "aws-ir-3", ref: "bkp", area: "Backups & Restore Testing",
+          question: "Are automated backups configured with tested and documented restore procedures?",
+          context: "AWS Well-Architected Reliability Pillar — backup and tested recovery.",
+          risk: "Untested backups frequently fail to restore when actually needed.",
+          remediation: "Centralize backups via AWS Backup; perform documented restore tests at least annually.",
+          policy: "AWS Backup centrally manages automated backups of RDS, EBS, and DynamoDB across the organization; restore procedures are tested at least annually and results are documented.",
+        },
+        {
+          id: "aws-ir-4", ref: "sh", area: "Security Hub Findings",
+          question: "Is AWS Security Hub enabled with findings actively reviewed and remediated?",
+          context: "AWS Shared Responsibility — aggregated security posture management.",
+          risk: "Findings collected but never triaged provide false assurance of security posture.",
+          remediation: "Enable Security Hub with AWS Foundational and CIS standards; assign owners for findings.",
+          policy: "AWS Security Hub aggregates findings from GuardDuty, Inspector, Config, and Macie; findings are triaged on a documented cadence with severity-based SLAs and remediation ownership.",
+        },
+      ],
+    },
+    {
+      id: "gov",
+      name: "Compliance & Governance",
+      questions: [
+        {
+          id: "aws-gov-1", ref: "scp", area: "Organizations & SCPs",
+          question: "Is AWS Organizations configured with Service Control Policies (SCPs) to enforce guardrails?",
+          context: "AWS Well-Architected — preventative guardrails via SCPs.",
+          risk: "Without SCPs, member accounts can disable security controls or operate in untrusted regions.",
+          remediation: "Deploy SCPs that deny disabling CloudTrail/GuardDuty and restrict to approved regions.",
+          policy: "AWS Organizations is configured with Service Control Policies that prevent disabling CloudTrail, GuardDuty, and Config, and restrict resource creation to approved regions across all member accounts.",
+        },
+        {
+          id: "aws-gov-2", ref: "tag", area: "Tagging Policy",
+          question: "Is a resource tagging policy enforced consistently across all environments?",
+          context: "AWS Well-Architected — tagging for ownership, cost, and data classification.",
+          risk: "Untagged resources cannot be attributed to an owner during incidents or audits.",
+          remediation: "Define required tags (Owner, Environment, DataClass) and enforce via Organizations Tag Policies.",
+          policy: "A mandatory tagging policy requires Owner, Environment, and DataClassification tags on all resources; compliance is enforced via AWS Organizations Tag Policies and audited by AWS Config rules.",
+        },
+        {
+          id: "aws-gov-3", ref: "1.x", area: "Access Reviews",
+          question: "Are regular access reviews conducted for all IAM users, roles, and permissions?",
+          context: "CIS AWS 1.x — periodic credential and permissions review.",
+          risk: "Stale users, roles, and over-privileged permissions accumulate and become attack surface.",
+          remediation: "Run quarterly IAM access reviews using IAM Access Analyzer and credential reports.",
+          policy: "IAM users, roles, and permissions are reviewed quarterly using IAM Access Analyzer findings and credential reports; unused identities and excess privileges are removed and the review is documented.",
+        },
+      ],
+    },
+  ],
+};
+
+const FRAMEWORKS: Framework[] = [SOC2, ISO, HIPAA, AWS];
 
 /* ---------------- App ---------------- */
 
@@ -857,7 +1090,7 @@ function AuditBridge() {
             <div>
               <div className="text-sm font-semibold text-foreground">AuditBridge</div>
               <div className="text-xs text-muted-foreground">
-                {framework ? framework.headerLabel : "Multi-framework readiness"}
+                {framework ? framework.headerLabel : "Multi-framework readiness · 4 frameworks"}
               </div>
             </div>
           </button>
@@ -927,7 +1160,7 @@ function FrameworkSelect({ onPick }: { onPick: (f: Framework) => void }) {
         breakdown, and a prioritized remediation plan.
       </p>
 
-      <div className="mt-10 grid gap-4 text-left md:grid-cols-3">
+      <div className="mt-10 grid gap-4 text-left sm:grid-cols-2 lg:grid-cols-2">
         {FRAMEWORKS.map((f) => (
           <button
             key={f.id}
