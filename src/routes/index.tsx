@@ -53,7 +53,7 @@ interface Domain {
 }
 
 interface Framework {
-  id: "soc2" | "iso27001" | "hipaa";
+  id: "soc2" | "iso27001" | "hipaa" | "aws";
   name: string;
   shortName: string;
   headerLabel: string;
