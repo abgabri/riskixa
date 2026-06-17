@@ -16,13 +16,13 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AuditBridge — Compliance Readiness in Minutes" },
+      { title: "Riskixa — Compliance Readiness in Minutes" },
       {
         name: "description",
         content:
           "Assess SOC 2, ISO/IEC 27001:2022, HIPAA Security Rule, or Cloud Security (AWS) readiness in minutes. Get a scored gap analysis, domain breakdown, and prioritized remediation plan.",
       },
-      { property: "og:title", content: "AuditBridge — Compliance Readiness in Minutes" },
+      { property: "og:title", content: "Riskixa — Compliance Readiness in Minutes" },
       {
         property: "og:description",
         content:
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/")({
       },
     ],
   }),
-  component: AuditBridge,
+  component: Riskixa,
 });
 
 type Answer = "yes" | "partial" | "no";
@@ -67,7 +67,7 @@ const SOC2: Framework = {
   id: "soc2",
   name: "SOC 2",
   shortName: "SOC 2",
-  headerLabel: "SOC 2 Full Readiness Assessment",
+  headerLabel: "Riskixa — SOC 2 Full Readiness Assessment",
   description:
     "AICPA Trust Services Criteria — Security (Common Criteria CC1–CC9).",
   citationLabel: (q) => `SOC 2 Trust Services Criteria ${q.ref}`,
@@ -120,7 +120,7 @@ const SOC2: Framework = {
           context: "Information needed to support the functioning of internal control.",
           risk: "Outdated system documentation produces inaccurate scoping and missed control coverage.",
           remediation: "Maintain a system description and data flow diagram reviewed at least annually.",
-          policy: "AuditBridge maintains a current system description, including data flows and control owners, reviewed annually and after any material architectural change.",
+          policy: "Riskixa maintains a current system description, including data flows and control owners, reviewed annually and after any material architectural change.",
         },
         {
           id: "cc2.2", ref: "CC2.2", area: "Internal Communication",
@@ -286,7 +286,7 @@ const SOC2: Framework = {
           context: "Detection and management of vulnerabilities in production systems.",
           risk: "Untriaged vulnerabilities accumulate as exploitable surface auditors will flag.",
           remediation: "Implement scanning with SLAs: critical 7d, high 30d, medium 90d.",
-          policy: "AuditBridge operates continuous vulnerability scanning across dependencies, container images, and infrastructure; findings are remediated per severity SLAs of 7, 30, and 90 days for critical, high, and medium.",
+          policy: "Riskixa operates continuous vulnerability scanning across dependencies, container images, and infrastructure; findings are remediated per severity SLAs of 7, 30, and 90 days for critical, high, and medium.",
         },
         {
           id: "cc7.2", ref: "CC7.2", area: "Monitoring & Anomaly Detection",
@@ -382,7 +382,7 @@ const ISO: Framework = {
   id: "iso27001",
   name: "ISO/IEC 27001:2022",
   shortName: "ISO 27001",
-  headerLabel: "ISO/IEC 27001:2022 Full Readiness Assessment",
+  headerLabel: "Riskixa — ISO/IEC 27001:2022 Full Readiness Assessment",
   description:
     "ISO/IEC 27001:2022 Annex A controls — organizational, people, physical, and technological.",
   citationLabel: (q) => `ISO/IEC 27001:2022 Annex ${q.ref}`,
@@ -615,7 +615,7 @@ const HIPAA: Framework = {
   id: "hipaa",
   name: "HIPAA Security Rule",
   shortName: "HIPAA",
-  headerLabel: "HIPAA Security Rule Full Readiness Assessment",
+  headerLabel: "Riskixa — HIPAA Security Rule Full Readiness Assessment",
   description:
     "45 CFR Part 164 Subpart C — Administrative, Physical, and Technical Safeguards for ePHI.",
   citationLabel: (q) => `45 CFR §${q.ref}`,
@@ -832,7 +832,7 @@ const AWS: Framework = {
   id: "aws",
   name: "Cloud Security (AWS)",
   shortName: "AWS",
-  headerLabel: "Cloud Security Readiness Assessment (AWS)",
+  headerLabel: "Riskixa — Cloud Security Readiness Assessment (AWS)",
   description:
     "AWS Shared Responsibility Model & CIS AWS Foundations Benchmark — 6 domains · 22 questions",
   citationLabel: (q) => `CIS AWS ${q.ref} — ${q.area}`,
@@ -1066,7 +1066,7 @@ const FRAMEWORKS: Framework[] = [SOC2, ISO, HIPAA, AWS];
 
 type Screen = "framework" | "assessment" | "results";
 
-function AuditBridge() {
+function Riskixa() {
   const [screen, setScreen] = useState<Screen>("framework");
   const [framework, setFramework] = useState<Framework | null>(null);
   const [domainIdx, setDomainIdx] = useState(0);
@@ -1088,7 +1088,7 @@ function AuditBridge() {
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <div className="text-sm font-semibold text-foreground">AuditBridge</div>
+              <div className="text-sm font-semibold text-foreground">Riskixa</div>
               <div className="text-xs text-muted-foreground">
                 {framework ? framework.headerLabel : "Multi-framework readiness · 4 frameworks"}
               </div>
@@ -1133,7 +1133,7 @@ function AuditBridge() {
       </main>
 
       <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground print:hidden">
-        AuditBridge · Demo readiness assessment · Not an attestation of compliance
+        Riskixa · Demo readiness assessment · Not an attestation of compliance
       </footer>
     </div>
   );
@@ -1149,10 +1149,10 @@ function FrameworkSelect({ onPick }: { onPick: (f: Framework) => void }) {
     <section className="text-center">
       <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
         <Sparkles className="h-3.5 w-3.5 text-primary" />
-        Built for pre-audit teams
+        Built for pre-audit teams · Powered by Riskixa
       </div>
       <h1 className="mt-6 font-display text-5xl leading-[1.05] text-foreground md:text-6xl">
-        AuditBridge — Compliance<br />Readiness in Minutes
+        Riskixa — Compliance<br />Readiness in Minutes
       </h1>
       <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
         Choose a framework to begin a full readiness assessment across its core
@@ -1499,7 +1499,7 @@ function Results({
     <section className="space-y-6 print:space-y-6">
       <div className="hidden print:block">
         <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          AuditBridge Report
+          Riskixa — Compliance Readiness Report
         </div>
         <h1 className="mt-1 font-display text-3xl text-foreground">
           {framework.headerLabel}
