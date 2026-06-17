@@ -67,7 +67,7 @@ const SOC2: Framework = {
   id: "soc2",
   name: "SOC 2",
   shortName: "SOC 2",
-  headerLabel: "SOC 2 Full Readiness Assessment",
+  headerLabel: "Riskixa — SOC 2 Full Readiness Assessment",
   description:
     "AICPA Trust Services Criteria — Security (Common Criteria CC1–CC9).",
   citationLabel: (q) => `SOC 2 Trust Services Criteria ${q.ref}`,
@@ -382,7 +382,7 @@ const ISO: Framework = {
   id: "iso27001",
   name: "ISO/IEC 27001:2022",
   shortName: "ISO 27001",
-  headerLabel: "ISO/IEC 27001:2022 Full Readiness Assessment",
+  headerLabel: "Riskixa — ISO/IEC 27001:2022 Full Readiness Assessment",
   description:
     "ISO/IEC 27001:2022 Annex A controls — organizational, people, physical, and technological.",
   citationLabel: (q) => `ISO/IEC 27001:2022 Annex ${q.ref}`,
@@ -615,7 +615,7 @@ const HIPAA: Framework = {
   id: "hipaa",
   name: "HIPAA Security Rule",
   shortName: "HIPAA",
-  headerLabel: "HIPAA Security Rule Full Readiness Assessment",
+  headerLabel: "Riskixa — HIPAA Security Rule Full Readiness Assessment",
   description:
     "45 CFR Part 164 Subpart C — Administrative, Physical, and Technical Safeguards for ePHI.",
   citationLabel: (q) => `45 CFR §${q.ref}`,
@@ -832,7 +832,7 @@ const AWS: Framework = {
   id: "aws",
   name: "Cloud Security (AWS)",
   shortName: "AWS",
-  headerLabel: "Cloud Security Readiness Assessment (AWS)",
+  headerLabel: "Riskixa — Cloud Security Readiness Assessment (AWS)",
   description:
     "AWS Shared Responsibility Model & CIS AWS Foundations Benchmark — 6 domains · 22 questions",
   citationLabel: (q) => `CIS AWS ${q.ref} — ${q.area}`,
