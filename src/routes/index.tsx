@@ -20,13 +20,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Assess SOC 2, ISO/IEC 27001:2022, or HIPAA Security Rule readiness in minutes. Get a scored gap analysis, domain breakdown, and prioritized remediation plan.",
+          "Assess SOC 2, ISO/IEC 27001:2022, HIPAA Security Rule, or Cloud Security (AWS) readiness in minutes. Get a scored gap analysis, domain breakdown, and prioritized remediation plan.",
       },
       { property: "og:title", content: "AuditBridge — Compliance Readiness in Minutes" },
       {
         property: "og:description",
         content:
-          "Multi-framework readiness assessment: SOC 2, ISO/IEC 27001:2022, and HIPAA. Scored gap analysis and prioritized remediation.",
+          "Multi-framework readiness assessment: SOC 2, ISO/IEC 27001:2022, HIPAA, and Cloud Security (AWS). Scored gap analysis and prioritized remediation.",
       },
     ],
   }),
