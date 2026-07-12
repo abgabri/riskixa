@@ -1510,7 +1510,7 @@ function Riskixa() {
             <div>
               <div className="text-sm font-semibold text-foreground">Riskixa</div>
               <div className="text-xs text-muted-foreground">
-                {framework ? framework.headerLabel : "Multi-framework readiness · 4 frameworks"}
+                {framework ? framework.headerLabel : "Multi-framework readiness · 6 frameworks"}
               </div>
             </div>
           </button>
