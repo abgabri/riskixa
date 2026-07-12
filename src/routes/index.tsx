@@ -26,7 +26,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Multi-framework readiness assessment: SOC 2, ISO/IEC 27001:2022, HIPAA, and Cloud Security (AWS). Scored gap analysis and prioritized remediation.",
+          "Multi-framework readiness assessment: SOC 2, ISO/IEC 27001:2022, HIPAA, Cloud Security (AWS), SOX, and GLBA. Scored gap analysis and prioritized remediation.",
       },
     ],
   }),
