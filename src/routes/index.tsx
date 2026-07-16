@@ -1505,7 +1505,7 @@ function Riskixa() {
       <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/80 backdrop-blur print:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <button onClick={reset} className="flex items-center gap-3 text-left">
-            <img src={riskixaLogo.url} alt="Riskixa" className="h-7 w-auto" />
+            <img src={riskixaLogo.url} alt="Riskixa" className="h-9 w-auto" />
             <span className="hidden text-xs font-medium text-slate-500 sm:inline">
               {framework ? framework.headerLabel : "Multi-framework readiness · 6 frameworks"}
             </span>
