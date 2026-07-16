@@ -1919,10 +1919,20 @@ function Results({
   return (
     <section className="space-y-6 print:space-y-6">
       <div className="hidden print:block">
-        <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Riskixa — Compliance Readiness Report
+        <div className="flex items-center gap-3">
+          <img
+            src={riskixaLogo.url}
+            alt="Riskixa"
+            width={1024}
+            height={512}
+            loading="lazy"
+            className="h-10 w-auto"
+          />
+          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Compliance Readiness Report
+          </div>
         </div>
-        <h1 className="mt-1 font-display text-3xl text-foreground">
+        <h1 className="mt-3 font-display text-3xl text-foreground">
           {framework.headerLabel}
         </h1>
       </div>
