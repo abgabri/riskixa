@@ -35,7 +35,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-surface: var(--surface);
-  --font-display: "Instrument Serif", Georgia, serif;
+  --font-display: "Inter", system-ui, sans-serif;
   --font-sans: "Inter", system-ui, sans-serif;
 }
 
@@ -48,9 +48,9 @@
   --card-foreground: oklch(0.22 0.04 250);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.22 0.04 250);
-  --primary: oklch(0.48 0.13 252);
+  --primary: oklch(0.22 0.05 260);
   --primary-foreground: oklch(0.99 0 0);
-  --primary-hover: oklch(0.42 0.14 252);
+  --primary-hover: oklch(0.18 0.05 260);
   --secondary: oklch(0.94 0.015 245);
   --secondary-foreground: oklch(0.28 0.05 252);
   --muted: oklch(0.96 0.01 240);
@@ -65,7 +65,7 @@
   --warning-foreground: oklch(0.22 0.04 250);
   --border: oklch(0.9 0.015 245);
   --input: oklch(0.9 0.015 245);
-  --ring: oklch(0.48 0.13 252);
+  --ring: oklch(0.22 0.05 260);
 }
 
 .dark {
@@ -111,6 +111,14 @@
   h1, h2, h3 {
     letter-spacing: -0.02em;
   }
+}
+
+@utility grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(15,23,42,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15,23,42,0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
 }
 
 @media print {
