@@ -212,8 +212,16 @@ function AboutPage() {
             </h2>
             <div className="mt-6 space-y-5 text-[17px] leading-relaxed text-slate-600">
               <p data-reveal style={{ transitionDelay: "120ms" }}>
-                Riskixa was developed by <span className="font-semibold text-slate-900">Abel Gabriel</span>,
-                a CISA-certified IT Risk and Compliance leader with over a decade of hands-on
+                Riskixa was developed by{" "}
+                <a
+                  href="https://www.linkedin.com/in/abgabriel/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-slate-900 underline decoration-slate-400 underline-offset-4 transition-colors hover:text-[#0b1f3a] hover:decoration-[#0b1f3a]"
+                >
+                  Abel Gabriel
+                </a>
+                , a CISA-certified IT Risk and Compliance leader with over a decade of hands-on
                 experience in the global banking and telecommunications sectors. Holding a Master
                 of Science in Information Technology Management, his background combines rigorous
                 academic theory with high-stakes practical application.
