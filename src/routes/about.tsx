@@ -184,66 +184,51 @@ function AboutPage() {
 
       {/* Founder */}
       <section className="border-t border-slate-200/70 bg-white">
-        <div className="mx-auto grid max-w-6xl gap-14 px-6 py-24 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:items-center md:gap-20">
-          <div data-reveal className="relative">
-            <div className="absolute -inset-4 rounded-3xl bg-gradient-to-br from-[#0b1f3a]/10 to-slate-200/40 blur-2xl" aria-hidden />
-            <div className="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-slate-200">
-              <img
-                src={headshot}
-                alt="Abel Gabriel, founder of Riskixa"
-                width={768}
-                height={960}
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </div>
-          <div>
-            <p data-reveal className="text-sm font-semibold uppercase tracking-wider text-[#0b1f3a]/70">
-              The Expert Behind Riskixa
+        <div className="mx-auto max-w-3xl px-6 py-24 text-center">
+          <p data-reveal className="text-sm font-semibold uppercase tracking-wider text-[#0b1f3a]/70">
+            The Expert Behind Riskixa
+          </p>
+          <h2
+            data-reveal
+            className="mt-3 text-3xl font-semibold tracking-tight text-[#0b1f3a] sm:text-4xl"
+            style={{ transitionDelay: "60ms" }}
+          >
+            Built by Practitioners, for Practitioners.
+          </h2>
+          <div className="mt-6 space-y-5 text-[17px] leading-relaxed text-slate-600">
+            <p data-reveal style={{ transitionDelay: "120ms" }}>
+              Riskixa was developed by{" "}
+              <a
+                href="https://www.linkedin.com/in/abgabriel/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-slate-900 underline decoration-slate-400 underline-offset-4 transition-colors hover:text-[#0b1f3a] hover:decoration-[#0b1f3a]"
+              >
+                Abel Gabriel
+              </a>
+              , a CISA-certified IT Risk and Compliance leader with over a decade of hands-on
+              experience in the global banking and telecommunications sectors. Holding a Master
+              of Science in Information Technology Management, his background combines rigorous
+              academic theory with high-stakes practical application.
             </p>
-            <h2
-              data-reveal
-              className="mt-3 text-3xl font-semibold tracking-tight text-[#0b1f3a] sm:text-4xl"
-              style={{ transitionDelay: "60ms" }}
-            >
-              Built by Practitioners, for Practitioners.
-            </h2>
-            <div className="mt-6 space-y-5 text-[17px] leading-relaxed text-slate-600">
-              <p data-reveal style={{ transitionDelay: "120ms" }}>
-                Riskixa was developed by{" "}
-                <a
-                  href="https://www.linkedin.com/in/abgabriel/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold text-slate-900 underline decoration-slate-400 underline-offset-4 transition-colors hover:text-[#0b1f3a] hover:decoration-[#0b1f3a]"
-                >
-                  Abel Gabriel
-                </a>
-                , a CISA-certified IT Risk and Compliance leader with over a decade of hands-on
-                experience in the global banking and telecommunications sectors. Holding a Master
-                of Science in Information Technology Management, his background combines rigorous
-                academic theory with high-stakes practical application.
-              </p>
-              <p data-reveal style={{ transitionDelay: "180ms" }}>
-                Having led comprehensive internal control reviews, engineered automated compliance
-                metrics, and guided enterprise teams through rigorous certifications, Riskixa was
-                born out of a first-hand understanding of the complexities of the audit process. It
-                is designed to bridge the gap between technical security and business strategy,
-                giving organizations the clarity they need before the formal audit begins.
-              </p>
-            </div>
-            <div data-reveal style={{ transitionDelay: "240ms" }} className="mt-8 flex flex-wrap gap-3">
-              {["CISA Certified", "MSc IT Management", "10+ years", "Banking & Telecom"].map((t) => (
-                <span
-                  key={t}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700"
-                >
-                  <FileCheck2 className="h-3 w-3 text-[#0b1f3a]" />
-                  {t}
-                </span>
-              ))}
-            </div>
+            <p data-reveal style={{ transitionDelay: "180ms" }}>
+              Having led comprehensive internal control reviews, engineered automated compliance
+              metrics, and guided enterprise teams through rigorous certifications, Riskixa was
+              born out of a first-hand understanding of the complexities of the audit process. It
+              is designed to bridge the gap between technical security and business strategy,
+              giving organizations the clarity they need before the formal audit begins.
+            </p>
+          </div>
+          <div data-reveal style={{ transitionDelay: "240ms" }} className="mt-8 flex flex-wrap justify-center gap-3">
+            {["CISA Certified", "MSc IT Management", "10+ years", "Banking & Telecom"].map((t) => (
+              <span
+                key={t}
+                className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700"
+              >
+                <FileCheck2 className="h-3 w-3 text-[#0b1f3a]" />
+                {t}
+              </span>
+            ))}
           </div>
         </div>
       </section>
