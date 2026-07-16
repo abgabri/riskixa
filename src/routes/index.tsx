@@ -1577,47 +1577,56 @@ function FrameworkSelect({ onPick }: { onPick: (f: Framework) => void }) {
     f.domains.reduce((s, d) => s + d.questions.length, 0);
 
   return (
-    <section className="text-center">
-      <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-        <Sparkles className="h-3.5 w-3.5 text-primary" />
-        Built for pre-audit teams · Powered by Riskixa
+    <section className="-mx-6 -mt-12 md:-mt-16">
+      <div className="relative overflow-hidden border-b border-slate-200/70">
+        <div className="absolute inset-0 grid-bg" aria-hidden />
+        <div className="pointer-events-none absolute inset-x-0 -top-40 h-96 bg-gradient-to-b from-[#0b1f3a]/5 to-transparent" aria-hidden />
+        <div className="relative mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-medium text-slate-600 shadow-sm">
+            <ShieldCheck className="h-3.5 w-3.5 text-[#0b1f3a]" />
+            Multi-framework readiness · 6 frameworks
+          </div>
+          <h1 className="mt-6 text-4xl font-semibold tracking-tight text-[#0b1f3a] sm:text-5xl md:text-6xl">
+            Compliance Readiness in Minutes.
+          </h1>
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600">
+            Choose a framework to begin a full readiness assessment across its core
+            control domains. You'll get a scored gap analysis, a domain-by-domain
+            breakdown, and a prioritized remediation plan.
+          </p>
+        </div>
       </div>
-      <h1 className="mt-6 font-display text-5xl leading-[1.05] text-foreground md:text-6xl">
-        Riskixa — Compliance<br />Readiness in Minutes
-      </h1>
-      <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
-        Choose a framework to begin a full readiness assessment across its core
-        control domains. You'll get a scored gap analysis, a domain-by-domain
-        breakdown, and a prioritized remediation plan.
-      </p>
 
-      <div className="mt-10 grid gap-4 text-left sm:grid-cols-2 lg:grid-cols-3">
-        {FRAMEWORKS.map((f) => (
-          <button
-            key={f.id}
-            onClick={() => onPick(f)}
-            className="group flex flex-col rounded-2xl border border-border bg-card p-6 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-primary/60 hover:shadow-md"
-          >
-            <div className="flex items-center justify-between">
-              <div className="text-xs font-semibold uppercase tracking-wider text-primary">
-                {f.shortName}
+      <div id="frameworks" className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+        <div className="grid gap-6 text-left sm:grid-cols-2 lg:grid-cols-3">
+          {FRAMEWORKS.map((f) => (
+            <button
+              key={f.id}
+              onClick={() => onPick(f)}
+              className="group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-7 text-left shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl"
+            >
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#0b1f3a]/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="flex items-center justify-between">
+                <div className="text-xs font-semibold uppercase tracking-wider text-[#0b1f3a]/70">
+                  {f.shortName}
+                </div>
+                <ArrowRight className="h-4 w-4 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-[#0b1f3a]" />
               </div>
-              <ArrowRight className="h-4 w-4 text-muted-foreground transition group-hover:translate-x-0.5 group-hover:text-primary" />
-            </div>
-            <h3 className="mt-3 font-display text-2xl leading-tight text-foreground">
-              {f.name}
-            </h3>
-            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
-              {f.description}
-            </p>
-            <div className="mt-4 flex items-center gap-3 text-xs text-muted-foreground">
-              <span className="rounded-full bg-secondary px-2 py-0.5 font-medium text-secondary-foreground">
-                {f.domains.length} domains
-              </span>
-              <span>{totalQs(f)} questions</span>
-            </div>
-          </button>
-        ))}
+              <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#0b1f3a]">
+                {f.name}
+              </h3>
+              <p className="mt-2 flex-1 text-[15px] leading-relaxed text-slate-600">
+                {f.description}
+              </p>
+              <div className="mt-5 flex items-center gap-3 text-xs text-slate-500">
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 font-medium text-slate-700">
+                  {f.domains.length} domains
+                </span>
+                <span>{totalQs(f)} questions</span>
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
     </section>
   );
