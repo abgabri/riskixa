@@ -98,7 +98,7 @@ function AboutPage() {
       <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link to="/" className="flex items-center gap-2">
-            <img src={riskixaLogo.url} alt="Riskixa" className="h-7 w-auto" />
+            <img src={riskixaLogo.url} alt="Riskixa" className="h-9 w-auto" />
           </Link>
           <nav className="flex items-center gap-6 text-sm font-medium text-slate-600">
             <Link to="/" className="transition-colors hover:text-slate-900">Assessments</Link>
