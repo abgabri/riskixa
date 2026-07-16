@@ -10,7 +10,6 @@ import {
   Linkedin,
 } from "lucide-react";
 import riskixaLogo from "@/assets/riskixa-logo.png.asset.json";
-import headshot from "@/assets/abel-gabriel-headshot.jpg";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
