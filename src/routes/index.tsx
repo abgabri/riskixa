@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   ShieldCheck,
@@ -1515,15 +1515,23 @@ function Riskixa() {
               </div>
             </div>
           </button>
-          {screen !== "framework" && (
-            <button
-              onClick={reset}
-              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:text-foreground"
+          <div className="flex items-center gap-4">
+            <Link
+              to="/about"
+              className="text-xs font-medium text-muted-foreground transition hover:text-foreground"
             >
-              <RotateCcw className="h-3.5 w-3.5" />
-              Restart
-            </button>
-          )}
+              About
+            </Link>
+            {screen !== "framework" && (
+              <button
+                onClick={reset}
+                className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:text-foreground"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Restart
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
