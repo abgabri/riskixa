@@ -1501,37 +1501,39 @@ function Riskixa() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card/60 backdrop-blur print:hidden">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-          <button onClick={reset} className="flex items-center gap-2 text-left">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <ShieldCheck className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="text-sm font-semibold text-foreground">Riskixa</div>
-              <div className="text-xs text-muted-foreground">
-                {framework ? framework.headerLabel : "Multi-framework readiness · 6 frameworks"}
-              </div>
-            </div>
+    <div className="min-h-screen scroll-smooth bg-white text-slate-900 antialiased">
+      <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/80 backdrop-blur print:hidden">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+          <button onClick={reset} className="flex items-center gap-3 text-left">
+            <img src={riskixaLogo.url} alt="Riskixa" className="h-7 w-auto" />
+            <span className="hidden text-xs font-medium text-slate-500 sm:inline">
+              {framework ? framework.headerLabel : "Multi-framework readiness · 6 frameworks"}
+            </span>
           </button>
-          <div className="flex items-center gap-4">
-            <Link
-              to="/about"
-              className="text-xs font-medium text-muted-foreground transition hover:text-foreground"
-            >
+          <nav className="flex items-center gap-6 text-sm font-medium text-slate-600">
+            <Link to="/about" className="transition-colors hover:text-slate-900">
               About
             </Link>
-            {screen !== "framework" && (
+            {screen !== "framework" ? (
               <button
                 onClick={reset}
-                className="inline-flex items-center gap-1.5 rounded-md border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground transition hover:text-foreground"
+                className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:text-slate-900"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 Restart
               </button>
+            ) : (
+              <button
+                onClick={() => {
+                  const el = document.getElementById("frameworks");
+                  el?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="inline-flex items-center gap-1.5 rounded-md bg-[#0b1f3a] px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#0a1a30] hover:shadow-md"
+              >
+                Start free <ArrowRight className="h-3.5 w-3.5" />
+              </button>
             )}
-          </div>
+          </nav>
         </div>
       </header>
 
@@ -1561,7 +1563,7 @@ function Riskixa() {
         )}
       </main>
 
-      <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground print:hidden">
+      <footer className="border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500 print:hidden">
         Riskixa · Demo readiness assessment · Not an attestation of compliance
       </footer>
     </div>
