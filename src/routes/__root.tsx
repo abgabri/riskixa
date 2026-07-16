@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import riskixaLogo from "../assets/riskixa-logo.png.asset.json";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -77,20 +78,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Riskixa helps startups assess compliance readiness for SOC 2, ISO 27001, and HIPAA." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Riskixa helps startups assess compliance readiness for SOC 2, ISO 27001, and HIPAA." },
+      { title: "Riskixa — Compliance Readiness in Minutes" },
+      { name: "description", content: "Riskixa helps teams assess compliance readiness for SOC 2, ISO 27001, HIPAA, AWS Cloud Security, SOX, and GLBA." },
+      { name: "author", content: "Riskixa" },
+      { property: "og:title", content: "Riskixa — Compliance Readiness in Minutes" },
+      { property: "og:description", content: "Riskixa helps teams assess compliance readiness for SOC 2, ISO 27001, HIPAA, AWS Cloud Security, SOX, and GLBA." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "Lovable App" },
-      { name: "twitter:description", content: "Riskixa helps startups assess compliance readiness for SOC 2, ISO 27001, and HIPAA." },
+      { name: "twitter:site", content: "@Riskixa" },
+      { name: "twitter:title", content: "Riskixa — Compliance Readiness in Minutes" },
+      { name: "twitter:description", content: "Riskixa helps teams assess compliance readiness for SOC 2, ISO 27001, HIPAA, AWS Cloud Security, SOX, and GLBA." },
       { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5c6fefd7-2a19-42b5-900f-4b81fc48b62b/id-preview-93690bf7--e1068f43-d0e2-497a-88ac-fad99d1f518b.lovable.app-1781304873845.png" },
       { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5c6fefd7-2a19-42b5-900f-4b81fc48b62b/id-preview-93690bf7--e1068f43-d0e2-497a-88ac-fad99d1f518b.lovable.app-1781304873845.png" },
     ],
     links: [
+      { rel: "icon", type: "image/png", href: riskixaLogo.url },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

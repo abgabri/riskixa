@@ -207,7 +207,7 @@ function AboutPage() {
                 Abel Gabriel
               </a>
               , a CISA-certified IT Risk and Compliance leader with over a decade of hands-on
-              experience in the global banking and telecommunications sectors. Holding a Master
+              experience in the global banking, fintech and telecommunications sectors. Holding a Master
               of Science in Information Technology Management, his background combines rigorous
               academic theory with high-stakes practical application.
             </p>
@@ -220,7 +220,7 @@ function AboutPage() {
             </p>
           </div>
           <div data-reveal style={{ transitionDelay: "240ms" }} className="mt-8 flex flex-wrap justify-center gap-3">
-            {["CISA Certified", "MSc IT Management", "10+ years", "Banking & Telecom"].map((t) => (
+            {["CISA Certified", "MS in IT Management", "10+ years", "Banking, Fintech & Telecom"].map((t) => (
               <span
                 key={t}
                 className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-700"
