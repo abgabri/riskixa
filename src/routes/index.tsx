@@ -12,6 +12,7 @@ import {
   Sparkles,
   RotateCcw,
 } from "lucide-react";
+import riskixaLogo from "@/assets/riskixa-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
