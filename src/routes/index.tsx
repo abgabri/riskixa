@@ -1505,7 +1505,11 @@ function Riskixa() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-6 py-12 md:py-16 print:max-w-none print:px-0 print:py-0">
+      <main
+        className={`mx-auto px-6 py-12 md:py-16 print:max-w-none print:px-0 print:py-0 ${
+          screen === "framework" ? "max-w-6xl" : "max-w-3xl"
+        }`}
+      >
         {screen === "framework" && (
           <FrameworkSelect
             onPick={(f) => {
@@ -1545,11 +1549,11 @@ function FrameworkSelect({ onPick }: { onPick: (f: Framework) => void }) {
     f.domains.reduce((s, d) => s + d.questions.length, 0);
 
   return (
-    <section className="-mx-6 -mt-12 md:-mt-16">
+    <section className="-mt-12 md:-mt-16 -mx-[calc(50%_-_50vw)]">
       <div className="relative overflow-hidden border-b border-slate-200/70">
         <div className="absolute inset-0 grid-bg" aria-hidden />
         <div className="pointer-events-none absolute inset-x-0 -top-40 h-96 bg-gradient-to-b from-[#0b1f3a]/5 to-transparent" aria-hidden />
-        <div className="relative mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
+        <div className="relative mx-auto max-w-4xl px-6 py-12 text-center md:py-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-medium text-slate-600 shadow-sm">
             <ShieldCheck className="h-3.5 w-3.5 text-[#0b1f3a]" />
             Multi-framework readiness · {FRAMEWORKS.length} frameworks
@@ -1565,7 +1569,7 @@ function FrameworkSelect({ onPick }: { onPick: (f: Framework) => void }) {
         </div>
       </div>
 
-      <div id="frameworks" className="mx-auto max-w-6xl px-6 py-16 md:py-20">
+      <div id="frameworks" className="mx-auto max-w-6xl px-6 py-10 md:py-12">
         <div className="grid gap-6 text-left sm:grid-cols-2 lg:grid-cols-3">
           {FRAMEWORKS.map((f) => (
             <button
