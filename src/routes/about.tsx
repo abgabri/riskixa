@@ -21,6 +21,8 @@ export const Route = createFileRoute("/about")({
           "Riskixa empowers pre-audit teams to evaluate security posture across SOC 2, ISO 27001, HIPAA, and AWS Cloud Security — built by CISA-certified practitioner Abel Gabriel.",
       },
       { property: "og:title", content: "About Riskixa" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content:

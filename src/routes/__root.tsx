@@ -6,6 +6,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -35,7 +36,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -88,8 +89,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:site", content: "@Riskixa" },
       { name: "twitter:title", content: "Riskixa — Compliance Readiness in Minutes" },
       { name: "twitter:description", content: "Riskixa helps teams assess compliance readiness for SOC 2, ISO 27001, HIPAA, AWS Cloud Security, SOX, and GLBA." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5c6fefd7-2a19-42b5-900f-4b81fc48b62b/id-preview-93690bf7--e1068f43-d0e2-497a-88ac-fad99d1f518b.lovable.app-1781304873845.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/5c6fefd7-2a19-42b5-900f-4b81fc48b62b/id-preview-93690bf7--e1068f43-d0e2-497a-88ac-fad99d1f518b.lovable.app-1781304873845.png" },
     ],
     links: [
       { rel: "icon", type: "image/png", href: riskixaLogo.url },
