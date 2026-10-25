@@ -1,0 +1,2 @@
+# Architecture
+- Framework contracts live in `src/lib/frameworks/types.ts`; new framework datasets live alongside them and use the shared assessment, results, and print flow to avoid framework-specific behavior drift.
