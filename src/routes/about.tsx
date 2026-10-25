@@ -90,7 +90,7 @@ function AboutPage() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 grid-bg" aria-hidden />
         <div className="pointer-events-none absolute inset-x-0 -top-40 h-96 bg-gradient-to-b from-[#0b1f3a]/5 to-transparent" aria-hidden />
-        <div className="relative mx-auto max-w-4xl px-6 py-24 text-center md:py-32">
+        <div className="relative mx-auto max-w-4xl px-6 py-14 text-center md:py-20">
           <div data-reveal className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-medium text-slate-600 shadow-sm">
             <ShieldCheck className="h-3.5 w-3.5 text-[#0b1f3a]" />
             Built for pre-audit teams
@@ -116,7 +116,7 @@ function AboutPage() {
 
       {/* Founder */}
       <section className="border-t border-slate-200/70 bg-white">
-        <div className="mx-auto max-w-3xl px-6 py-24 text-center">
+        <div className="mx-auto max-w-3xl px-6 py-14 text-center md:py-16">
           <p data-reveal className="text-sm font-semibold uppercase tracking-wider text-[#0b1f3a]/70">
             The Expert Behind Riskixa
           </p>
@@ -177,7 +177,7 @@ function AboutPage() {
           aria-hidden
         />
         <div className="pointer-events-none absolute -top-24 left-1/2 h-72 w-[42rem] -translate-x-1/2 rounded-full bg-blue-400/10 blur-3xl" aria-hidden />
-        <div className="relative mx-auto max-w-3xl px-6 py-24 text-center">
+        <div className="relative mx-auto max-w-3xl px-6 py-14 text-center md:py-16">
           <p data-reveal className="mx-auto max-w-2xl text-xs leading-relaxed text-white/60">
             Riskixa provides demo readiness assessments intended for internal evaluation and
             planning. It does not constitute a formal attestation of compliance.
