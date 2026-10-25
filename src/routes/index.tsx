@@ -1595,7 +1595,7 @@ function FrameworkSelect({ onPick }: { onPick: (f: Framework) => void }) {
               </p>
               <div className="mt-5 flex items-center gap-3 text-xs text-slate-500">
                 <span className="rounded-full border border-slate-200 bg-slate-50 px-2 py-0.5 font-medium text-slate-700">
-                  {f.domains.length} domains
+                  {f.domains.length} {f.id === "nist" ? "functions" : "domains"}
                 </span>
                 <span>{totalQs(f)} questions</span>
               </div>
