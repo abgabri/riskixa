@@ -1491,23 +1491,6 @@ function Riskixa() {
             </Link>
             <button
               onClick={() => {
-                if (screen === "framework") {
-                  const el = document.getElementById("frameworks");
-                  el?.scrollIntoView({ behavior: "smooth" });
-                } else {
-                  reset();
-                  window.setTimeout(() => {
-                    const el = document.getElementById("frameworks");
-                    el?.scrollIntoView({ behavior: "smooth" });
-                  }, 50);
-                }
-              }}
-              className="transition-colors hover:text-slate-900"
-            >
-              Assessment
-            </button>
-            <button
-              onClick={() => {
                 if (screen !== "framework") reset();
                 window.setTimeout(() => {
                   const el = document.getElementById("frameworks");

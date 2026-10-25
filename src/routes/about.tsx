@@ -76,7 +76,6 @@ function AboutPage() {
           </Link>
           <nav className="flex items-center gap-6 text-sm font-medium text-slate-600">
             <Link to="/about" className="transition-colors hover:text-slate-900">About</Link>
-            <Link to="/" className="transition-colors hover:text-slate-900">Assessment</Link>
             <Link
               to="/"
               className="inline-flex items-center gap-1.5 rounded-md bg-[#0b1f3a] px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#0a1a30] hover:shadow-md"
