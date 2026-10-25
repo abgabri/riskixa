@@ -12,7 +12,7 @@ import {
   Sparkles,
   RotateCcw,
 } from "lucide-react";
-import riskixaLogo from "@/assets/riskixa-logo.png.asset.json";
+import riskixaLogo from "@/assets/riskixa-mark.png.asset.json";
 import type { Answer, Framework, Question } from "@/lib/frameworks/types";
 import { NIST } from "@/lib/frameworks/nist";
 
@@ -1480,7 +1480,7 @@ function Riskixa() {
       <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/80 backdrop-blur print:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link to="/" className="flex items-center gap-3">
-            <img src={riskixaLogo.url} alt="Riskixa" className="h-9 w-auto" />
+            <img src={riskixaLogo.url} alt="Riskixa" className="h-12 w-auto" />
             <span className="hidden text-xs font-medium text-slate-500 sm:inline">
               Multi-frameworks readiness
             </span>
@@ -1910,10 +1910,10 @@ function Results({
           <img
             src={riskixaLogo.url}
             alt="Riskixa"
-            width={1024}
-            height={512}
+            width={218}
+            height={157}
             loading="lazy"
-            className="h-10 w-auto"
+            className="h-12 w-auto"
           />
           <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Compliance Readiness Report

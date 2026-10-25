@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { ShieldCheck, FileCheck2, ArrowRight, Linkedin } from "lucide-react";
-import riskixaLogo from "@/assets/riskixa-logo.png.asset.json";
+import riskixaLogo from "@/assets/riskixa-mark.png.asset.json";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -69,7 +69,7 @@ function AboutPage() {
       <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link to="/" className="flex items-center gap-3">
-            <img src={riskixaLogo.url} alt="Riskixa" className="h-9 w-auto" />
+            <img src={riskixaLogo.url} alt="Riskixa" className="h-12 w-auto" />
             <span className="hidden text-xs font-medium text-slate-500 sm:inline">
               Multi-frameworks readiness
             </span>
