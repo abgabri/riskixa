@@ -1479,35 +1479,45 @@ function Riskixa() {
     <div className="min-h-screen scroll-smooth bg-white text-slate-900 antialiased">
       <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/80 backdrop-blur print:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <button onClick={reset} className="flex items-center gap-3 text-left">
+          <Link to="/" className="flex items-center gap-3">
             <img src={riskixaLogo.url} alt="Riskixa" className="h-9 w-auto" />
             <span className="hidden text-xs font-medium text-slate-500 sm:inline">
-              {framework ? framework.headerLabel : `Multi-framework readiness · ${FRAMEWORKS.length} frameworks`}
+              Multi-frameworks readiness
             </span>
-          </button>
+          </Link>
           <nav className="flex items-center gap-6 text-sm font-medium text-slate-600">
             <Link to="/about" className="transition-colors hover:text-slate-900">
               About
             </Link>
-            {screen !== "framework" ? (
-              <button
-                onClick={reset}
-                className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:text-slate-900"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                Restart
-              </button>
-            ) : (
-              <button
-                onClick={() => {
+            <button
+              onClick={() => {
+                if (screen === "framework") {
                   const el = document.getElementById("frameworks");
                   el?.scrollIntoView({ behavior: "smooth" });
-                }}
-                className="inline-flex items-center gap-1.5 rounded-md bg-[#0b1f3a] px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#0a1a30] hover:shadow-md"
-              >
-                Start free <ArrowRight className="h-3.5 w-3.5" />
-              </button>
-            )}
+                } else {
+                  reset();
+                  window.setTimeout(() => {
+                    const el = document.getElementById("frameworks");
+                    el?.scrollIntoView({ behavior: "smooth" });
+                  }, 50);
+                }
+              }}
+              className="transition-colors hover:text-slate-900"
+            >
+              Assessment
+            </button>
+            <button
+              onClick={() => {
+                if (screen !== "framework") reset();
+                window.setTimeout(() => {
+                  const el = document.getElementById("frameworks");
+                  el?.scrollIntoView({ behavior: "smooth" });
+                }, 50);
+              }}
+              className="inline-flex items-center gap-1.5 rounded-md bg-[#0b1f3a] px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:bg-[#0a1a30] hover:shadow-md"
+            >
+              Start free <ArrowRight className="h-3.5 w-3.5" />
+            </button>
           </nav>
         </div>
       </header>
