@@ -1,4 +1,4 @@
 # Tasks
-- [ ] Add NIST CSF 2.0 framework and seventh landing option.
-- [ ] Verify all 22 questions, prioritized results, category citations, and full report.
-- [ ] Apply required package security update and check the app.
+- [x] Add NIST CSF 2.0 framework and seventh landing option.
+- [x] Verify all 22 questions, prioritized results, category citations, and full report.
+- [x] Apply required package security update and check the app.
