@@ -13,6 +13,8 @@ import {
   RotateCcw,
 } from "lucide-react";
 import riskixaLogo from "@/assets/riskixa-logo.png.asset.json";
+import type { Answer, Framework, Question } from "@/lib/frameworks/types";
+import { NIST } from "@/lib/frameworks/nist";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,47 +23,20 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Assess SOC 2, ISO/IEC 27001:2022, HIPAA, Cloud Security (AWS), SOX, or GLBA readiness in minutes. Get a scored gap analysis, domain breakdown, and prioritized remediation plan.",
+          "Assess SOC 2, ISO/IEC 27001:2022, HIPAA, Cloud Security (AWS), SOX, GLBA, or NIST CSF 2.0 readiness in minutes. Get a scored gap analysis, domain breakdown, and prioritized remediation plan.",
       },
       { property: "og:title", content: "Riskixa — Compliance Readiness in Minutes" },
       {
         property: "og:description",
         content:
-          "Multi-framework readiness assessment: SOC 2, ISO/IEC 27001:2022, HIPAA, Cloud Security (AWS), SOX, and GLBA. Scored gap analysis and prioritized remediation.",
+          "Multi-framework readiness assessment: SOC 2, ISO/IEC 27001:2022, HIPAA, Cloud Security (AWS), SOX, GLBA, and NIST CSF 2.0. Scored gap analysis and prioritized remediation.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Riskixa,
 });
-
-type Answer = "yes" | "partial" | "no";
-
-interface Question {
-  id: string;
-  ref: string; // e.g. "CC6.1", "A.8.5", "164.312(a)"
-  area: string;
-  question: string;
-  context: string;
-  risk: string;
-  remediation: string;
-  policy: string;
-}
-
-interface Domain {
-  id: string;
-  name: string;
-  questions: Question[];
-}
-
-interface Framework {
-  id: "soc2" | "iso27001" | "hipaa" | "aws" | "sox" | "glba";
-  name: string;
-  shortName: string;
-  headerLabel: string;
-  citationLabel: (q: Question) => string;
-  description: string;
-  domains: Domain[];
-}
 
 /* ---------------- SOC 2 ---------------- */
 const SOC2: Framework = {
@@ -1481,7 +1456,7 @@ const GLBA: Framework = {
   ],
 };
 
-const FRAMEWORKS: Framework[] = [SOC2, ISO, HIPAA, AWS, SOX, GLBA];
+const FRAMEWORKS: Framework[] = [SOC2, ISO, HIPAA, AWS, SOX, GLBA, NIST];
 
 /* ---------------- App ---------------- */
 
@@ -1507,7 +1482,7 @@ function Riskixa() {
           <button onClick={reset} className="flex items-center gap-3 text-left">
             <img src={riskixaLogo.url} alt="Riskixa" className="h-9 w-auto" />
             <span className="hidden text-xs font-medium text-slate-500 sm:inline">
-              {framework ? framework.headerLabel : "Multi-framework readiness · 6 frameworks"}
+              {framework ? framework.headerLabel : `Multi-framework readiness · ${FRAMEWORKS.length} frameworks`}
             </span>
           </button>
           <nav className="flex items-center gap-6 text-sm font-medium text-slate-600">
@@ -1584,7 +1559,7 @@ function FrameworkSelect({ onPick }: { onPick: (f: Framework) => void }) {
         <div className="relative mx-auto max-w-4xl px-6 py-20 text-center md:py-28">
           <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-medium text-slate-600 shadow-sm">
             <ShieldCheck className="h-3.5 w-3.5 text-[#0b1f3a]" />
-            Multi-framework readiness · 6 frameworks
+            Multi-framework readiness · {FRAMEWORKS.length} frameworks
           </div>
           <h1 className="mt-6 text-4xl font-semibold tracking-tight text-[#0b1f3a] sm:text-5xl md:text-6xl">
             Compliance Readiness in Minutes.
