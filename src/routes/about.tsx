@@ -1,14 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
-import {
-  ShieldCheck,
-  Lock,
-  FileCheck2,
-  HeartPulse,
-  Cloud,
-  ArrowRight,
-  Linkedin,
-} from "lucide-react";
+import { ShieldCheck, FileCheck2, ArrowRight, Linkedin } from "lucide-react";
 import riskixaLogo from "@/assets/riskixa-logo.png.asset.json";
 
 export const Route = createFileRoute("/about")({
@@ -55,29 +47,6 @@ function useReveal() {
   }, []);
   return ref;
 }
-
-const frameworks = [
-  {
-    icon: ShieldCheck,
-    title: "SOC 2",
-    body: "Evaluate your posture against the AICPA Trust Services Criteria for Security, mapping out Common Criteria domains to ensure robust data protection.",
-  },
-  {
-    icon: Lock,
-    title: "ISO 27001",
-    body: "Assess readiness across organizational, people, physical, and technological controls based on the ISO/IEC 27001:2022 Annex A standard.",
-  },
-  {
-    icon: HeartPulse,
-    title: "HIPAA",
-    body: "Navigate the HIPAA Security Rule with targeted assessments of Administrative, Physical, and Technical Safeguards for ePHI.",
-  },
-  {
-    icon: Cloud,
-    title: "AWS Cloud Security",
-    body: "Gauge your cloud infrastructure security utilizing the AWS Shared Responsibility Model and the CIS AWS Foundations Benchmark.",
-  },
-];
 
 function AboutPage() {
   const rootRef = useReveal();
@@ -140,47 +109,6 @@ function AboutPage() {
             industry-leading frameworks, transforming complex regulatory requirements into
             actionable remediation strategies.
           </p>
-        </div>
-      </section>
-
-      {/* Platform / Frameworks */}
-      <section className="border-t border-slate-200/70 bg-slate-50/60">
-        <div className="mx-auto max-w-6xl px-6 py-24">
-          <div className="mx-auto max-w-2xl text-center">
-            <p data-reveal className="text-sm font-semibold uppercase tracking-wider text-[#0b1f3a]/70">
-              The Platform
-            </p>
-            <h2
-              data-reveal
-              className="mt-3 text-3xl font-semibold tracking-tight text-[#0b1f3a] sm:text-4xl"
-              style={{ transitionDelay: "60ms" }}
-            >
-              Multi-Framework Assessments
-            </h2>
-          </div>
-
-          <div className="mt-14 grid gap-6 sm:grid-cols-2">
-            {frameworks.map((f, i) => {
-              const Icon = f.icon;
-              return (
-                <div
-                  key={f.title}
-                  data-reveal
-                  style={{ transitionDelay: `${i * 80}ms` }}
-                  className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-xl"
-                >
-                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#0b1f3a]/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#0b1f3a] text-white shadow-sm transition-transform duration-300 group-hover:scale-110">
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mt-5 text-xl font-semibold tracking-tight text-[#0b1f3a]">
-                    {f.title}
-                  </h3>
-                  <p className="mt-2 text-[15px] leading-relaxed text-slate-600">{f.body}</p>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </section>
 
